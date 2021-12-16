@@ -1,0 +1,12 @@
+FROM ubuntu:20.04 
+MAINTAINER lxc 
+COPY sources.list /etc/apt 
+RUN apt-get update && apt-get dist-upgrade -y \ 
+    && apt-get install mariadb-server -y \ 
+    && sed -i s/bind-address/#bind-address/g /etc/mysql/mariadb.conf.d/50-server.cnf \ 
+    && /etc/init.d/mysql start \ 
+    && mysql -u root -e "change master to master_host='db1', 
+master_user='root',master_password='123456'" \ 
+    && mysql -u root -e "start slave" 
+EXPOSE 3306 
+CMD /usr/bin/mysqld_safe

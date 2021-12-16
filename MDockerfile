@@ -1,0 +1,14 @@
+FROM ubuntu:20.04 
+MAINTAINER lxc 
+COPY sources.list /etc/apt 
+RUN apt-get update && apt-get dist-upgrade -y \ 
+    && apt-get install mariadb-server -y 
+COPY 50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf 
+RUN /etc/init.d/mysql start \ 
+    && mysql -u root -e "create user 'root'@'%' identified by '123456'" \ 
+    && mysql -u root -e "grant all on *.* to 'root'@'%'" \ 
+    && mysql -u root -e "create database student_manager" \ 
+    && mysql -u root -e "create table student_manager.student (id int primary key auto_increment, name varchar(20))" \ 
+    && mysql -u root -e "insert into student_manager.student values(null, 'zhangsan')" 
+EXPOSE 3306 
+CMD /usr/bin/mysqld_safe

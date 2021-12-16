@@ -1,0 +1,12 @@
+FROM ubuntu:20.04 
+MAINTAINER lxc 
+ADD sources.list /etc/apt 
+ADD Mycat-server-1.6.7.5.tar.gz /root 
+RUN apt-get update && apt-get dist-upgrade -y \ 
+    && apt-get install openjdk-8-jdk -y \ 
+    && mkdir /root/mycat/logs 
+RUN apt-get install supervisor -y 
+ADD schema.xml /root/mycat/conf 
+ADD server.xml /root/mycat/conf 
+ADD supervisord.conf /etc/supervisord.conf 
+CMD ["/usr/bin/supervisord"] 

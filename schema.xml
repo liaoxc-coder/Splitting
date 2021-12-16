@@ -1,0 +1,12 @@
+<?xml version="1.0"?> 
+<!DOCTYPE mycat:schema SYSTEM "schema.dtd"> 
+<mycat:schema xmlns:mycat="http://io.mycat/"> 
+    <schema name="USERDB" checkSQLschema="true" sqlMaxLimit="100" dataNode="dn1"></schema> 
+    <dataNode name="dn1" dataHost="localhost1" database="student_manager" /> 
+	<dataHost name="localhost1" maxCon="1000" minCon="10" balance="3" dbType="mysql" dbDriver="native" writeType="0" switchType="1" slaveThreshold="100"> 
+        <heartbeat>select user()</heartbeat>
+		<writeHost host="hostM1" url="db1:3306" user="root" password="123456">
+		    <readHost host="hostS1" url="db2:3306" user="root" password="123456" />
+		</writeHost>
+	</dataHost>
+</mycat:schema>

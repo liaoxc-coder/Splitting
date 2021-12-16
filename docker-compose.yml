@@ -1,0 +1,29 @@
+version: "3.8" 
+services: 
+  db1: 
+    image: ubuntu:db1 
+    build: 
+      context: . 
+      dockerfile: MDockerfile 
+    networks: 
+      - db_network 
+  db2: 
+    image: ubuntu:db2 
+    build: 
+      context: . 
+      dockerfile: SDockerfile 
+    networks: 
+      - db_network 
+  mycat: 
+    image: ubuntu:mycat 
+    build: 
+      context: . 
+      dockerfile: MycatDockerfile 
+    ports: 
+      - 8066:8066 
+      - 9066:9066 
+    networks: 
+      - db_network 
+networks: 
+  db_network: 
+    driver: bridge
